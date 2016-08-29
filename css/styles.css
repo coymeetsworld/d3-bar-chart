@@ -2,3 +2,17 @@ body {
   background-color: black;
   color: white;
 }
+
+.chart {
+  display: block;
+  margin: 0 auto;
+}
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
