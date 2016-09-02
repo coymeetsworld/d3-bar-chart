@@ -9,23 +9,15 @@ $(document).ready(function() {
   var x = d3.scaleTime().range([0, chartWidth]);
   var y = d3.scaleLinear().range([chartHeight, 0]);
 
-  //var chart = d3.select('.chart').attr("width", chartWidth+margin.left+margin.right).attr("height", chartHeight+margin.top+margin.bottom);
-  //var chart = d3.select('.chart').attr("width", chartWidth+margin.left+margin.right).attr("height", chartHeight+margin.top+margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   var chart = d3.select('.chart').attr("width", 1400).attr("height", 600).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, gdpData) {
 	if (error) throw error;
 
-	console.log(gdpData.data);
-
 	gdpData.data.forEach(function(d) {
-		console.log(d[0]);
 		d[0] = parseTime(d[0]);
-		console.log(d[0]);
-		console.log("-------");
 	});
 
-	console.log(d3.extent(gdpData.data, function(d) { return d[0]; }));
 	x.domain(d3.extent(gdpData.data, function(d) { return d[0]; }));
 	y.domain([0, d3.max(gdpData.data, function(d) { return d[1]; } ) ]);
 
@@ -34,7 +26,6 @@ $(document).ready(function() {
   	var bar = chart.selectAll("g")
 	               .data(gdpData.data)
 				   .enter().append("rect")
-				   .attr("class", "bar")
 				   .attr("x", function(d) { return x(d[0]); })
 				   .attr("y", function(d) { return y(d[1]); })
 				   .attr("height", function(d) { return chartHeight - y(d[1]); })
@@ -48,7 +39,6 @@ $(document).ready(function() {
      .attr("transform", "translate(0," + chartHeight + ")")
 	 .call(d3.axisBottom(x));
 	
-		 
     //Add y-axis
     chart.append("g")
 		 .call(d3.axisLeft(y));
@@ -68,12 +58,6 @@ $(document).ready(function() {
 		 .style("text-anchor", "middle")
 		 .style("color", "white")
 		 .text("Year");
-
-  	/*bar.append("text")
-       .attr("x", barWidth / 2)
-	   .attr("y", function(d) { return x(d[1]) + 3; })
-       .attr("dy", ".75em")
-       .text(function(d) { return d[1]; });*/
   });
 
 });

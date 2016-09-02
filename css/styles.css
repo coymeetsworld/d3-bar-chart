@@ -10,6 +10,9 @@ body {
 .chart rect {
   fill: steelblue;
 }
+.chart rect:hover {
+  fill: #fff;
+}
 
 .chart text {
   fill: white;
@@ -25,5 +28,4 @@ body {
 .axis line {
   fill: none;
   stroke: #fff;
-  /*shape-rendering: crispEdges;*/
 }
