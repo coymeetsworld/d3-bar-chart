@@ -6,6 +6,7 @@ body {
 .chart {
   display: block;
   margin: 0 auto;
+  padding-top: 100px;
 }
 .chart rect {
   fill: steelblue;
@@ -28,4 +29,9 @@ body {
 .axis line {
   fill: none;
   stroke: #fff;
+}
+
+#tooltip {
+  font-size: 2em;
+  color: #fff;
 }
