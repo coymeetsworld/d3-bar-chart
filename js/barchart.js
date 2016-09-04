@@ -1,27 +1,6 @@
 $(document).ready(function() {
 
-  function hideTooltip() {
-    tooltip.setAttributeNS(null,"visibility","hidden");
-  }
-  function renderTooltip(x, y, data)
-  {
-	console.log(tooltip);
-	console.log(data);
-    tooltip.setAttributeNS(null,"x",x+30);
-    tooltip.setAttributeNS(null,"y",y+5);
-    tooltip.setAttributeNS(null,"visibility","visible");
-	var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-	d3.select("#tooltip").html(monthNames[data[0].getMonth()] + " " + data[0].getFullYear() + ": $" + data[1] + " Billion");
-
-	/*length = tooltip.getComputedTextLength();
-	tooltip_bg.setAttributeNS(null,"width",length+20);
-	tooltip_bg.setAttributeNS(null,"height",50);
-    tooltip_bg.setAttributeNS(null,"x",x-75);
-    tooltip_bg.setAttributeNS(null,"y",y-30);
-    tooltip_bg.setAttributeNS(null,"visibility","visibile");*/
-  }
-
+  var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   var margin = {top: 20, right: 30, bottom: 30, left: 40}
   var chartWidth = 1400 - margin.left - margin.right;
   var chartHeight = 600 - margin.top - margin.bottom;
@@ -33,10 +12,21 @@ $(document).ready(function() {
 
   var chart = d3.select('.chart').attr("width", 1400).attr("height", 600).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  function hideTooltip() {
+    tooltip.setAttributeNS(null,"visibility","hidden");
+  }
+
+  function renderTooltip(x, y, data) {
+    tooltip.setAttributeNS(null,"x",x+30);
+    tooltip.setAttributeNS(null,"y",y+5);
+    tooltip.setAttributeNS(null,"visibility","visible");
+	d3.select("#tooltip").html(monthNames[data[0].getMonth()] + " " + data[0].getFullYear() + ": $" + data[1] + " Billion");
+  }
+
+
   d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, gdpData) {
 	
 	if (error) throw error;
-
 
 	gdpData.data.forEach(function(d) {
 		d[0] = parseTime(d[0]);
@@ -45,7 +35,6 @@ $(document).ready(function() {
 	x.domain(d3.extent(gdpData.data, function(d) { return d[0]; }));
 	y.domain([0, d3.max(gdpData.data, function(d) { return d[1]; } ) ]);
 
-		 
 	var barWidth = chartWidth / gdpData.data.length;
   	var bar = chart.selectAll("g")
 	               .data(gdpData.data)
@@ -71,7 +60,7 @@ $(document).ready(function() {
     chart.append("g")
 		 .call(d3.axisLeft(y));
 
-    // text label for the y axis
+    //Add Text label for the y-axis
     chart.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", -5)
@@ -87,5 +76,4 @@ $(document).ready(function() {
 		 .style("color", "white")
 		 .text("Year");
   });
-
 });
