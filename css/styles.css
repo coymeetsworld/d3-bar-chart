@@ -2,11 +2,16 @@ body {
   background-color: black;
   color: white;
 }
-
+h1 {
+  margin-top: 25px;
+  text-align: center;
+}
 .chart {
   display: block;
   margin: 0 auto;
-  padding-top: 100px;
+  padding: 75px 15px 35px 45px;
+  margin-top: 50px;
+  border: 1px solid white;
 }
 .chart rect {
   fill: steelblue;
@@ -17,21 +22,16 @@ body {
 
 .chart text {
   fill: white;
-  font: 10px sans-serif;
+  font: 15px sans-serif;
   text-anchor: end;
 }
 
-.axis text {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
+path, line {
   fill: none;
   stroke: #fff;
 }
 
 #tooltip {
-  font-size: 2em;
+  font-size: 1.5em;
   color: #fff;
 }
