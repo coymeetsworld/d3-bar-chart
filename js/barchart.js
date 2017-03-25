@@ -9,7 +9,11 @@ var parseTime = d3.timeParse("%Y-%m-%d");
 var x = d3.scaleTime().range([0, chartWidth]);
 var y = d3.scaleLinear().range([chartHeight, 0]);
 
-var chart = d3.select('.chart').attr("width", 1400).attr("height", 600).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var chart = d3.select('.chart')
+              .attr("width", 1400)
+              .attr("height", 600)
+              .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 function hideTooltip() {
   tooltip.setAttributeNS(null,"visibility","hidden");
@@ -24,14 +28,25 @@ function renderTooltip(x, y, data) {
 
 
 d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, gdpData) {
-  console.log("Data pulled");
   if (error) throw error;
 
   gdpData.data.forEach(function(d) {
     d[0] = parseTime(d[0]);
   });
 
-  x.domain(d3.extent(gdpData.data, function(d) { return d[0]; }));
+  let minQtr = d3.min(gdpData.data, function(d) { return d[0]; });
+  let maxQtr = d3.max(gdpData.data, function(d) { return d[0]; });
+
+  // Needed to extend x-axis further.
+  var m, addOneQtr = (maxQtr = new Date(+maxQtr)).getDate()
+  maxQtr.setMonth(maxQtr.getMonth() + 3, 1)
+  m = maxQtr.getMonth()
+  maxQtr.setDate(addOneQtr)
+  if (maxQtr.getMonth() !== m) maxQtr.setDate(0)
+  console.log("Min year: " + minQtr);
+  console.log("Max year: " + maxQtr);
+  x.domain([minQtr, maxQtr]);
+  
   y.domain([0, d3.max(gdpData.data, function(d) { return d[1]; } ) ]);
 
   var barWidth = chartWidth / gdpData.data.length;
