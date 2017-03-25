@@ -23,6 +23,37 @@ const renderTooltip = (x, y, data) => {
   d3.select("#tooltip").html(MONTH_NAMES[data[0].getMonth()] + " " + data[0].getFullYear() + ": $" + data[1] + " Billion");
 }
 
+const buildXAxis = (x) => {
+  chart.append("g")
+       .attr("transform", `translate(0,${CHART_HEIGHT})`)
+       .call(d3.axisBottom(x));
+  chart.append("text")
+       .attr("transform", "rotate(-90)")
+       .attr("y", -5)
+       .attr("x", -98)
+       .attr("dy", "2em")
+       .style("text-anchor", "middle")
+       .text("Gross Domestic Product (GDP)"); 
+}
+
+const buildYAxis = (y) => {
+  chart.append("g").call(d3.axisLeft(y));
+  chart.append("text")
+       .attr("transform", `translate(${CHART_WIDTH/2},${CHART_HEIGHT+MARGIN.top+20})`)
+       .attr("transform", `translate(${CHART_WIDTH/2},${CHART_HEIGHT+MARGIN.top+20})`)
+       .style("text-anchor", "middle")
+       .style("color", "white")
+       .text("Year");
+}
+
+const addOneQtrToDate = (d) => {
+  var m, addOneQtr = (d = new Date(+d)).getDate()
+  d.setMonth(d.getMonth() + 3, 1)
+  m = d.getMonth()
+  d.setDate(addOneQtr)
+  if (d.getMonth() !== m) d.setDate(0)
+  return d;
+}
 
 d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json", (error, gdpData) => {
   if (error) throw error;
@@ -34,15 +65,11 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 
   let minQtr = d3.min(gdpData.data, d => d[0]);
   let maxQtr = d3.max(gdpData.data, d => d[0]);
-
-  // Needed to extend x-axis further to cover last data point.
-  var m, addOneQtr = (maxQtr = new Date(+maxQtr)).getDate()
-  maxQtr.setMonth(maxQtr.getMonth() + 3, 1)
-  m = maxQtr.getMonth()
-  maxQtr.setDate(addOneQtr)
-  if (maxQtr.getMonth() !== m) maxQtr.setDate(0)
-  x.domain([minQtr, maxQtr]);
   
+  // Need to extend x-axis one quarter so it covers all data points
+  maxQtr = addOneQtrToDate(maxQtr);
+  
+  x.domain([minQtr, maxQtr]);
   y.domain([0, d3.max(gdpData.data, d => d[1])]);
 
   var barWidth = CHART_WIDTH / gdpData.data.length;
@@ -61,28 +88,6 @@ d3.json("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
                    renderTooltip(this.x.baseVal.value, this.y.baseVal.value, d3.select(this).datum());
                  });
 
-  //Add x-axis
-  chart.append("g")
-       .attr("transform", `translate(0,${CHART_HEIGHT})`)
-       .call(d3.axisBottom(x));
-  
-  //Add y-axis
-  chart.append("g").call(d3.axisLeft(y));
-
-  //Add Text label for the y-axis
-  chart.append("text")
-       .attr("transform", "rotate(-90)")
-       .attr("y", -5)
-       .attr("x", -98)
-       .attr("dy", "2em")
-       .style("text-anchor", "middle")
-       .text("Gross Domestic Product (GDP)"); 
-    
-  //Add text label for x-axis
-  chart.append("text")
-       .attr("transform", `translate(${CHART_WIDTH/2},${CHART_HEIGHT+MARGIN.top+20})`)
-       .attr("transform", `translate(${CHART_WIDTH/2},${CHART_HEIGHT+MARGIN.top+20})`)
-       .style("text-anchor", "middle")
-       .style("color", "white")
-       .text("Year");
+  buildXAxis(x);
+  buildYAxis(y);
 });
