@@ -9,7 +9,7 @@ This project uses d3.js to display the US Gross Domestic Product by quarter over
 https://coymeetsworld.github.io/d3-bar-chart
 
 <div align="center">
-	<img src="images/readme-imgs/preview.png" alt="Preview image of a d3 bar chart"/>
+	<img src="imgs/readme-imgs/preview.png" alt="Preview image of a d3 bar chart"/>
 </div>
 
 ## About
